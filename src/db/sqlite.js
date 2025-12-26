@@ -1,7 +1,10 @@
 import Database from 'better-sqlite3';
+import path from 'path';
 
-const db = new Database('database.sqlite');
+// 將 database 路徑固定到專案根目錄
+const dbPath = path.resolve('./database.sqlite');
 
+const db = new Database(dbPath);
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS cafes (
