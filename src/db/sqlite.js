@@ -1,14 +1,30 @@
-const sqlite3 = require('sqlite3');
-const path = require('path');
+import Database from 'better-sqlite3';
 
-const dbPath = path.resolve(process.cwd(), 'database.sqlite');
+const db = new Database('database.sqlite');
 
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Failed to connect DB:', err);
-  } else {
-    console.log('Connected to SQLite');
-  }
-});
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS cafes (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    city TEXT,
+    wifi INTEGER,
+    seat INTEGER,
+    quiet INTEGER,
+    tasty INTEGER,
+    cheap INTEGER,
+    music INTEGER,
+    url TEXT,
+    address TEXT,
+    latitude TEXT,
+    longitude TEXT,
+    limited_time TEXT,
+    socket TEXT,
+    standing_desk TEXT,
+    mrt TEXT,
+    open_time TEXT
+    )
+    `
+).run();
 
-module.exports = db;
+export default db;
