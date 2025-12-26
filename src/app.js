@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const cafesRouter = require('./routes/cafes');
+import express from 'express';
+import cors from 'cors';
+import cafesRouter from './routes/cafes.js';
 
 const app = express();
 
@@ -13,4 +13,4 @@ app.get('/', (_, res) => {
   res.send('Coffee Finder API is running');
 });
 
-module.exports = app;
+export default app;
