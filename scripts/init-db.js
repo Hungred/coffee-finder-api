@@ -1,4 +1,3 @@
-import '../src/db/sqlite.js'; // 建表
 import db from '../src/db/sqlite.js';
 import fetch from 'node-fetch';
 

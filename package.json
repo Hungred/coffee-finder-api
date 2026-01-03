@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "init": "node scripts/init-db.js"
+    "init": "node scripts/init-db.js",
+    "postinstall": "node scripts/init-db.js"
   },
   "repository": {
     "type": "git",
