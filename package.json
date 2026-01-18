@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Hungred/coffee-finder-api#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.5.0",
     "cors": "^2.8.5",
     "express": "^5.2.1",
