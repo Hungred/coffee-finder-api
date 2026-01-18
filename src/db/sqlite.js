@@ -5,6 +5,9 @@ import path from 'path';
 const dbPath = path.resolve('./database.sqlite');
 
 const db = new Database(dbPath);
+
+db.pragma('foreign_keys = ON');
+
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS cafes (
@@ -41,4 +44,18 @@ db.prepare(
   )
 `
 ).run();
+
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS user_favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    cafe_id TEXT NOT NULL,
+    UNIQUE(user_id, cafe_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+  )
+`
+).run();
+
 export default db;
