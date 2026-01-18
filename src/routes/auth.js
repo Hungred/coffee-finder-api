@@ -17,7 +17,7 @@ router.post('/login', (req, res) => {
 
   // 1. 找使用者
   const user = db.prepare(`SELECT * FROM users WHERE email = ?`).get(email);
-
+  console.log('找使用者', user, db.prepare(`SELECT * FROM users`).all());
   if (!user) {
     return res.status(401).json({
       success: false,
