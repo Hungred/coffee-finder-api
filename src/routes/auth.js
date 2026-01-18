@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
   if (!user) {
     return res.status(401).json({
       success: false,
-      message: '帳號或密碼錯誤',
+      message: '無此用戶，帳號或密碼錯誤',
     });
   }
 
@@ -31,7 +31,7 @@ router.post('/login', (req, res) => {
   if (!isValid) {
     return res.status(401).json({
       success: false,
-      message: '帳號或密碼錯誤',
+      message: '密碼錯誤',
     });
   }
 

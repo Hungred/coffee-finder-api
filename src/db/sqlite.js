@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import { randomUUID } from 'crypto';
+import bcrypt from 'bcrypt';
 
 // 將 database 路徑固定到專案根目錄
 const dbPath = path.resolve('./database.sqlite');
@@ -46,12 +47,14 @@ db.prepare(
 `
 ).run();
 
+db.prepare(`DELETE FROM users`).run();
+const hash = bcrypt.hashSync('1234', 10);
 db.prepare(
   `
   INSERT OR IGNORE INTO users (id, email, password_hash, name)
   VALUES (?, ?, ?, ?)
 `
-).run(randomUUID(), 'test@test.com', '1234', '測試使用者');
+).run(randomUUID(), 'test@test.com', hash, '測試使用者');
 
 db.prepare(
   `
