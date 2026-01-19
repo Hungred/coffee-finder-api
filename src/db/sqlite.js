@@ -47,7 +47,7 @@ db.prepare(
 `
 ).run();
 
-db.prepare(`DELETE FROM users`).run();
+// db.prepare(`DELETE FROM users`).run(); // 清空 users table
 const hash = bcrypt.hashSync('1234', 10);
 db.prepare(
   `
