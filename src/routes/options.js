@@ -5,6 +5,7 @@ const router = express.Router();
 
 // 取得所有城市及該城市咖啡廳數量
 router.get('/city', (req, res) => {
+  console.log('city');
   try {
     const rows = db
       .prepare(
@@ -24,10 +25,14 @@ router.get('/city', (req, res) => {
       count: r.count,
     }));
 
-    res.json(result);
+    res.json({
+      data: {
+        cities: result,
+      },
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: '取得城市列表失敗' });
+    res.status(500).json({ data: { cities: [], message: '取得城市列表失敗' } });
   }
 });
 

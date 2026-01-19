@@ -12,7 +12,9 @@ router.post('/login', (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   if (!email || !password) {
-    return res.status(400).json({ success: false, message: '缺少參數' });
+    return res
+      .status(400)
+      .json({ data: { success: false, message: '缺少參數' } });
   }
 
   // 1. 找使用者
@@ -20,8 +22,10 @@ router.post('/login', (req, res) => {
   console.log('找使用者', user, db.prepare(`SELECT * FROM users`).all());
   if (!user) {
     return res.status(401).json({
-      success: false,
-      message: '無此用戶，帳號或密碼錯誤',
+      data: {
+        success: false,
+        message: '無此用戶，帳號或密碼錯誤',
+      },
     });
   }
 
@@ -30,8 +34,10 @@ router.post('/login', (req, res) => {
 
   if (!isValid) {
     return res.status(401).json({
-      success: false,
-      message: '密碼錯誤',
+      data: {
+        success: false,
+        message: '密碼錯誤',
+      },
     });
   }
 
@@ -47,17 +53,19 @@ router.post('/login', (req, res) => {
 
   // 4. 回傳
   res.json({
-    success: true,
-    token,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
+    data: {
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
     },
   });
 });
 
 router.post('/logout', (req, res) => {
-  res.json({ message: '登出成功' });
+  res.json({ success: true, data: { message: '登出成功' } });
 });
 export default router;

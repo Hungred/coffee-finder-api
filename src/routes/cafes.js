@@ -7,10 +7,10 @@ const router = express.Router();
 router.get('/', (req, res) => {
   try {
     const { searchQuery, city, tags } = req.query;
+    console.log('收到 API 请求，查询参数：', req.query); // 加这行
 
     let sql = 'SELECT * FROM cafes WHERE 1=1';
     const params = [];
-
     // 篩選 city
     if (city) {
       sql += ' AND city LIKE ?';
@@ -37,10 +37,10 @@ router.get('/', (req, res) => {
     }
 
     const cafes = db.prepare(sql).all(...params);
-    res.json(cafes);
+    res.json({ data: { cafes: cafes } });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: '取得咖啡廳失敗' });
+    res.status(500).json({ data: { cafes: [], message: '取得咖啡廳失敗' } });
   }
 });
 
@@ -52,13 +52,15 @@ router.get('/id/:id', (req, res) => {
     const cafe = db.prepare('SELECT * FROM cafes WHERE id = ?').get(id);
 
     if (!cafe) {
-      return res.status(404).json({ message: 'Cafe not found' });
+      return res
+        .status(404)
+        .json({ data: { cafe: {}, message: 'Cafe not found' } });
     }
 
-    res.json(cafe);
+    res.json({ data: { cafe: cafe } });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: '取得咖啡廳失敗' });
+    res.status(500).json({ data: { cafe: {}, message: '取得咖啡廳失敗' } });
   }
 });
 
@@ -70,12 +72,14 @@ router.get('/city/:city', (req, res) => {
     const cafe = db.prepare('SELECT * FROM cafes WHERE city = ?').all(city);
 
     if (!cafe) {
-      return res.status(404).json({ message: 'Cafe not found' });
+      return res
+        .status(404)
+        .json({ data: { cafes: [], message: 'Cafe not found' } });
     }
-    res.json(cafe);
+    res.json({ data: { cafes: cafe } });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: '取得咖啡廳失敗' });
+    res.status(500).json({ data: { cafes: [], message: '取得咖啡廳失敗' } });
   }
 });
 export default router;

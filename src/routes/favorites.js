@@ -14,7 +14,12 @@ router.get('/', authenticateJWT, (req, res) => {
     .map((row) => row.cafe_id);
 
   if (favorites.length === 0) {
-    return res.json({ success: true, data: [] });
+    return res.json({
+      success: true,
+      data: {
+        cafes: [],
+      },
+    });
   }
 
   // 用 IN 查多筆咖啡廳
@@ -24,7 +29,7 @@ router.get('/', authenticateJWT, (req, res) => {
     .all(...favorites);
 
   console.log('favorites', favorites, cafes);
-  res.json({ success: true, data: cafes });
+  res.json({ success: true, data: { cafes: cafes } });
 });
 
 // 切換收藏狀態 (新增或移除)
@@ -43,16 +48,20 @@ router.post('/toggle', authenticateJWT, (req, res) => {
     // 已收藏 → 移除
     db.prepare('DELETE FROM user_favorites WHERE id = ?').run(existing.id);
     return res.json({
-      success: true,
-      action: 'removed',
-      message: '已移除收藏',
+      data: {
+        success: true,
+        action: 'removed',
+        message: '已移除收藏',
+      },
     });
   } else {
     // 未收藏 → 新增
     db.prepare(
       'INSERT INTO user_favorites (user_id, cafe_id) VALUES (?, ?)'
     ).run(userId, cafeId);
-    return res.json({ success: true, action: 'added', message: '已加入收藏' });
+    return res.json({
+      data: { success: true, action: 'added', message: '已加入收藏' },
+    });
   }
 });
 
