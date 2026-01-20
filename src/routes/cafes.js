@@ -6,7 +6,7 @@ const router = express.Router();
 // 列表 API：支援 searchQuery、city、tags 篩選
 router.get('/', (req, res) => {
   try {
-    const { searchQuery, city, tags } = req.query;
+    const { searchQuery, city, tags, page, page_size } = req.query;
     console.log('收到 API 请求，查询参数：', req.query); // 加这行
 
     let sql = 'SELECT * FROM cafes WHERE 1=1';
@@ -35,7 +35,15 @@ router.get('/', (req, res) => {
         if (tag === 'limited_time') sql += " AND limited_time = 'no'";
       });
     }
+    // 分頁
+    if (page && page_size) {
+      const pageNum = parseInt(page) || 1;
+      const pageSize = parseInt(page_size) || 10;
+      const offset = (pageNum - 1) * pageSize;
 
+      sql += ' LIMIT ? OFFSET ?';
+      params.push(pageSize, offset);
+    }
     const cafes = db.prepare(sql).all(...params);
     res.json({ data: { cafes: cafes } });
   } catch (err) {
